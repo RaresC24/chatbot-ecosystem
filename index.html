@@ -1,0 +1,2250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- EmailJS library for sending emails -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    /* Global resets removed to avoid conflicts with Odoo */
+    .mcx-chatbot,
+    .mcx-chatbot * {
+      box-sizing: border-box;
+    }
+
+    .mcx-chatbot {
+      position: fixed;
+      bottom: 4rem;
+      right: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.75rem;
+      z-index: 9999;
+      font-family: "Segoe UI", Arial, sans-serif;
+      text-align: left;
+      --mcx-avatar-image: url("data:image/jpeg;base64,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");
+      pointer-events: none;
+    }
+
+    .mcx-chat-window {
+      width: min(30vw, 380px);
+      height: clamp(460px, 80vh, 760px);
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid #545454;
+      border-radius: 1rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0;
+      transform: scale(0);
+      transform-origin: bottom right;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .mcx-chatbot.mcx-widget-expanded .mcx-chat-window {
+      opacity: 1;
+      transform: scale(1);
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .mcx-chat-header {
+      padding: 1rem 1.25rem;
+      background: transparent;
+      border-bottom: 1px solid #565555;
+      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #ededed;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mcx-chat-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+    }
+
+    .mcx-chat-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-image: var(--mcx-avatar-image);
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      flex-shrink: 0;
+    }
+
+    .mcx-chat-history {
+      flex: 1;
+      padding: 1rem 1.25rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      background: transparent;
+      text-align: left;
+    }
+
+    .mcx-message {
+      display: flex;
+      width: 100%;
+      line-height: 1.5;
+    }
+
+    .mcx-message--user {
+      justify-content: flex-end;
+    }
+
+    .mcx-message--bot {
+      justify-content: flex-start;
+    }
+
+    .mcx-bubble {
+      padding: 0.75rem 0.95rem;
+      border-radius: 1.1rem;
+      max-width: 78%;
+      word-break: break-word;
+      font-size: 0.92rem;
+      letter-spacing: 0.01em;
+      text-align: left;
+    }
+
+    .mcx-bubble--user {
+      background: #f5f5f5;
+      color: #050505;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .mcx-bubble--bot {
+      background: #151515;
+      color: #f5f5f5;
+      border: 1px solid #1f1f1f;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    }
+
+    .mcx-bubble p {
+      margin: 0.5rem 0;
+      line-height: 1.6;
+    }
+
+    .mcx-bubble p:first-child {
+      margin-top: 0;
+    }
+
+    .mcx-bubble p:last-child {
+      margin-bottom: 0;
+    }
+
+    .mcx-bubble ol,
+    .mcx-bubble ul {
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+      line-height: 1.6;
+      list-style-position: outside;
+    }
+
+    .mcx-bubble ol {
+      counter-reset: none;
+      list-style-type: decimal;
+    }
+
+    .mcx-bubble ol:first-child,
+    .mcx-bubble ul:first-child {
+      margin-top: 0;
+    }
+
+    .mcx-bubble ol:last-child,
+    .mcx-bubble ul:last-child {
+      margin-bottom: 0;
+    }
+
+    .mcx-bubble li {
+      margin: 0.25rem 0;
+    }
+
+    .mcx-bubble strong {
+      font-weight: 600;
+    }
+
+    .mcx-bubble em {
+      font-style: italic;
+    }
+
+    .mcx-bubble a {
+      color: #4a9eff;
+      text-decoration: underline;
+      transition: color 150ms ease;
+    }
+
+    .mcx-bubble a:hover {
+      color: #6bb0ff;
+    }
+
+    .mcx-chat-input {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid #1f1f1f;
+      background: transparent;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .mcx-chat-input input {
+      flex: 1;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid #222;
+      border-radius: 999px;
+      background: #111;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border 150ms ease, background 150ms ease;
+    }
+
+    .mcx-chat-input input:focus {
+      border-color: #fff;
+      background: #151515;
+    }
+
+    .mcx-send-button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: #fff;
+      color: #000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: transform 120ms ease, background 120ms ease;
+      flex-shrink: 0;
+    }
+
+    .mcx-send-button:hover {
+      transform: scale(1.05);
+      background: #f0f0f0;
+    }
+
+    .mcx-send-button:active {
+      transform: scale(0.95);
+    }
+
+    .mcx-send-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .mcx-widget-toggle-btn {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      position: relative;
+      pointer-events: auto;
+    }
+
+    .mcx-widget-toggle-btn::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background-image: var(--mcx-avatar-image);
+      background-size: cover;
+      background-position: center;
+    }
+
+    .mcx-widget-toggle-btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.35), rgba(0, 0, 0, 0.35));
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+    }
+
+    .mcx-widget-toggle-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .mcx-widget-toggle-btn:active {
+      transform: translateY(1px);
+    }
+
+    .mcx-chatbot.mcx-widget-expanded .mcx-widget-toggle-btn::before {
+      content: "⮟";
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      color: #000;
+      font-size: 2rem;
+      font-weight: 600;
+      opacity: 1 !important;
+    }
+
+    .mcx-chatbot.mcx-widget-expanded .mcx-widget-toggle-btn::after {
+      background: none;
+    }
+
+    .mcx-widget-toggle-btn.mcx-widget-loading::before {
+      display: none;
+      /* Hide background image during loading */
+    }
+
+    .mcx-widget-toggle-btn.mcx-widget-loading::after {
+      background: #fff;
+      border: 3px solid rgba(0, 0, 0, 0.2);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: mcx-spin 0.8s linear infinite;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .mcx-widget-toggle-btn.mcx-widget-loading:hover {
+      transform: none;
+    }
+
+    @keyframes mcx-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .mcx-greeting-popup {
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      width: 15vw;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+      z-index: 10000;
+    }
+
+    .mcx-greeting-bubble {
+      padding: 0.75rem 0.95rem;
+      background: #151515;
+      color: #f5f5f5;
+      border: 1px solid #1f1f1f;
+      border-radius: 1.1rem;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      word-break: break-word;
+      cursor: pointer;
+      pointer-events: none;
+      /* Default to none so they don't capture clicks when hidden */
+    }
+
+    .mcx-greeting-popup.mcx-popup-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mcx-greeting-popup.mcx-popup-visible .mcx-greeting-bubble {
+      pointer-events: auto;
+      /* Only capture clicks when visible */
+    }
+
+    /* Arrow only on the last bubble */
+    .mcx-greeting-bubble:last-child {
+      position: relative;
+      /* For pseudo-element positioning */
+    }
+
+    .mcx-greeting-bubble:last-child::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      right: 20px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid #151515;
+    }
+
+    @media (max-width: 700px) {
+      .mcx-chat-window {
+        width: 85vw !important;
+        height: 70vh !important;
+        /* Shorter on mobile */
+      }
+
+      /* Partial open state for mobile */
+      .mcx-chat-window.mcx-mobile-partial {
+        height: 35vh !important;
+        min-height: 300px;
+        /* Ensure enough space for greeting + input */
+      }
+
+      .mcx-greeting-popup {
+        width: 60vw !important;
+      }
+    }
+
+    @media (max-width: 1600px) and (min-width: 701px) {
+      .mcx-chat-window {
+        width: 40vw !important;
+        /* Slimmer on tablet/laptop */
+        height: 65vh !important;
+      }
+
+      /* Partial open state for tablet/laptop */
+      .mcx-chat-window.mcx-mobile-partial {
+        height: 35vh !important;
+        min-height: 300px;
+      }
+
+      .mcx-greeting-popup {
+        width: 40vw !important;
+      }
+    }
+
+    /* Reduce header and footer height on mobile and tablet (<= 1600px) */
+    @media (max-width: 1600px) {
+      .mcx-chat-header {
+        padding: 0.6rem 1rem !important;
+      }
+
+      .mcx-chat-input {
+        padding: 0.6rem 1rem !important;
+      }
+    }
+
+    /* Contact Form Styles */
+    .mcx-contact-form {
+      margin-top: 0.5rem;
+      padding: 1rem;
+      background: #1a1a1a;
+      border: 1px solid #2f2f2f;
+      border-radius: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .mcx-contact-form input {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #333;
+      border-radius: 0.5rem;
+      background: #0f0f0f;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border 150ms ease, background 150ms ease;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .mcx-contact-form input:focus {
+      border-color: #fff;
+      background: #151515;
+    }
+
+    .mcx-contact-form input::placeholder {
+      color: #888;
+    }
+
+    .mcx-contact-form button {
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background: #fff;
+      color: #000;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 120ms ease, background 120ms ease;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .mcx-contact-form button:hover {
+      transform: scale(1.02);
+      background: #f0f0f0;
+    }
+
+    .mcx-contact-form button:active {
+      transform: scale(0.98);
+    }
+
+    .mcx-contact-form button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .mcx-form-success {
+      padding: 0.75rem;
+      background: #1a3a1a;
+      border: 1px solid #2a5a2a;
+      border-radius: 0.5rem;
+      color: #90ee90;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .mcx-form-error {
+      padding: 0.75rem;
+      background: #3a1a1a;
+      border: 1px solid #5a2a2a;
+      border-radius: 0.5rem;
+      color: #ee9090;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mcx-chatbot" class="mcx-chatbot">
+    <div id="mcx-chat-window" class="mcx-chat-window">
+      <div class="mcx-chat-header">
+        <span class="mcx-chat-title">RiA</span>
+        <span class="mcx-chat-avatar" role="img" aria-label="RiA avatar"></span>
+      </div>
+      <div id="mcx-chat-history" class="mcx-chat-history"></div>
+      <div class="mcx-chat-input">
+        <input id="mcx-chat-input" type="text" placeholder="Type &amp; press Enter" autocomplete="off">
+        <button id="mcx-send-button" class="mcx-send-button" aria-label="Send message">➤</button>
+      </div>
+    </div>
+    <div id="mcx-greeting-popup" class="mcx-greeting-popup"></div>
+    <button id="mcx-chat-toggle" class="mcx-widget-toggle-btn" aria-label="Open chat"></button>
+  </div>
+
+  <script>
+    // Initialize EmailJS (you'll need to get your own keys from https://www.emailjs.com/)
+    // Replace these with your EmailJS service ID, template ID, and public key
+    const EMAILJS_SERVICE_ID = ""; // Get from EmailJS dashboard
+    const EMAILJS_TEMPLATE_ID = ""; // Get from EmailJS dashboard
+    const EMAILJS_PUBLIC_KEY = ""; // Get from EmailJS dashboard
+    const RECIPIENT_EMAIL = "your-email@example.com"; // Email address to receive form submissions
+
+    // Initialize EmailJS
+    (function () {
+      if (EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+      }
+    })();
+
+    // const OPENAI_API_KEY = "REMOVED_FOR_SECURITY"; // Key is now hidden in the Cloudflare Worker
+    // Replace this with your actual Cloudflare Worker URL after deploying
+    const WORKER_URL = "https://your-cloudflare-worker-url.workers.dev";
+
+    // Config file names (to be fetched via Cloudflare Worker for private repo access)
+    const INSTRUCTIONS_FILE = "instructiuni.txt";
+    const LINKS_FILE = "training_links.txt";
+    const GREETING_FILE = "greeting.json";
+    const TRAINING_DATA_FILE = "training_data.json";
+
+    // Helper function to fetch config files via the Cloudflare Worker (for private repo access)
+    async function fetchConfigFromWorker(filename) {
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "get_config_file", filename: filename })
+        });
+        
+        if (!response.ok) throw new Error(`Worker status: ${response.status}`);
+        const data = await response.json();
+        return data.content;
+      } catch (err) {
+        console.error(`Failed to fetch ${filename} from worker:`, err);
+        return null;
+      }
+    }
+
+    // Quota Constants
+    const RESTRICTION_DURATION = 6 * 60 * 60 * 1000; // 6 hours
+    const LIMIT_1_MINUTE = 6;
+    const LIMIT_30_MINUTES = 15;
+
+    // DOM Elements - Initialized early to avoid ReferenceErrors
+    const chatbot = document.getElementById("mcx-chatbot");
+    const chatWindow = document.getElementById("mcx-chat-window");
+    const chatToggle = document.getElementById("mcx-chat-toggle");
+    const chatHistory = document.getElementById("mcx-chat-history");
+    const chatInput = document.getElementById("mcx-chat-input");
+    const sendButton = document.getElementById("mcx-send-button");
+    const greetingPopup = document.getElementById("mcx-greeting-popup");
+
+    // State Variables
+    let conversationHistory = [];
+    let messageTimestamps = []; // Track message timestamps for rate limiting
+    let greetingPopupTimeout = null; // Store timeout to cancel if needed
+    let systemInstructions = "";
+    let greetingTranslations = {
+      "English": "Hello! I'm RiA, your Ai assistant. How can I help?"
+    };
+    let conversationId = "chat_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
+    let userIP = "Unknown";
+    let userLanguage = "English"; // Default language until detected via IP
+    let userCountry = "Unknown"; // Default country
+    const detectedLanguages = new Set(); // Track all languages used (empty by default)
+    let generatedGreeting = "Hello! I'm RiA, your Ai assistant. How can I help?"; // Greeting generated in user's language
+    let greetingReady = false;
+
+    // Try to detect language from IP geolocation
+    async function detectLanguageFromIP() {
+      // Use ipwho.is which supports CORS and returns the user's IP directly
+      // We cannot use proxies because they would return the proxy's location, not the user's
+      const services = [
+        {
+          url: "https://ipwho.is/",
+          type: "ipwho"
+        },
+        {
+          url: "https://ipapi.co/json/", // Fallback, might work directly in some envs
+          type: "ipapi"
+        }
+      ];
+
+      const languageMap = {
+        "ro": "Romanian", "en": "English", "fr": "French", "de": "German",
+        "es": "Spanish", "it": "Italian", "pt": "Portuguese", "ru": "Russian",
+        "zh": "Chinese", "ja": "Japanese", "ko": "Korean", "ar": "Arabic",
+        "nl": "Dutch", "pl": "Polish", "tr": "Turkish", "sv": "Swedish",
+        "da": "Danish", "no": "Norwegian", "fi": "Finnish", "cs": "Czech",
+        "hu": "Hungarian", "el": "Greek", "he": "Hebrew", "th": "Thai",
+        "vi": "Vietnamese"
+      };
+
+      const countryToLang = {
+        "RO": "Romanian", "GB": "English", "US": "English", "FR": "French", "DE": "German",
+        "ES": "Spanish", "IT": "Italian", "PT": "Portuguese", "RU": "Russian",
+        "CN": "Chinese", "JP": "Japanese", "KR": "Korean", "SA": "Arabic",
+        "NL": "Dutch", "PL": "Polish", "TR": "Turkish", "SE": "Swedish",
+        "DK": "Danish", "NO": "Norwegian", "FI": "Finnish", "CZ": "Czech",
+        "HU": "Hungarian", "GR": "Greek", "IL": "Hebrew", "TH": "Thai",
+        "VN": "Vietnamese"
+      };
+
+      // Try each service
+      for (const service of services) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+          const response = await fetch(service.url, {
+            signal: controller.signal
+          });
+
+          clearTimeout(timeoutId);
+
+          if (response.ok) {
+            const data = await response.json();
+
+            // Handle ipwho.is and similar formats with country_code
+            if (data.country_code && countryToLang[data.country_code]) {
+              const ipLang = countryToLang[data.country_code];
+              const ipCountry = data.country || data.country_name || "Unknown";
+              userIP = data.ip || "Unknown";
+              console.log(`IP geolocation successful via ${service.url} (Country: ${data.country_code})`);
+              return { language: ipLang, country: ipCountry };
+            }
+
+            // Handle ipapi.co format
+            if (data.languages) {
+              const langCode = data.languages.split(",")[0].split("-")[0].toLowerCase();
+              const ipLang = languageMap[langCode];
+              const ipCountry = data.country_name || "Unknown";
+              if (ipLang) {
+                console.log(`IP geolocation successful via ${service.url}`);
+                return { language: ipLang, country: ipCountry };
+              }
+            }
+          }
+        }
+        catch (err) {
+          console.warn(`Geolocation failed via ${service.url}:`, err);
+          continue;
+        }
+      }
+
+      // All services failed
+      console.log("IP geolocation not available, using default language");
+      return null;
+    }
+
+    // Default UI strings (English) - IMMUTABLE SOURCE OF TRUTH
+    const defaultUiTranslations = {
+      companyPlaceholder: "Company",
+      emailPlaceholder: "Email",
+      phonePlaceholder: "Phone",
+      submitButton: "Submit",
+      sendingButton: "Sending...",
+      successMessage: "✓ Thank you! Form submitted. A specialist will contact you soon.",
+      errorMessage: "✗ Error sending. Please try again or contact us directly.",
+      chatErrorMessage: "I'm sorry, I encountered an error. Please try again.",
+      restrictionMessage: "Thank you for your interest in Robot Industries products. To continue the discussion, please fill out the form below."
+    };
+
+    // Current UI translations (mutable, initialized with defaults)
+    let uiTranslations = { ...defaultUiTranslations };
+
+    // Update visible form elements if form is currently shown
+    function updateVisibleForm() {
+      const form = document.getElementById("mcx-contact-form");
+      if (!form) return;
+
+      const companyInput = form.querySelector('input[name="user_company"]');
+      const emailInput = form.querySelector('input[name="user_email"]');
+      const phoneInput = form.querySelector('input[name="user_phone"]');
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      if (companyInput) companyInput.placeholder = uiTranslations.companyPlaceholder;
+      if (emailInput) emailInput.placeholder = uiTranslations.emailPlaceholder;
+      if (phoneInput) phoneInput.placeholder = uiTranslations.phonePlaceholder;
+      if (submitBtn && !submitBtn.disabled) submitBtn.textContent = uiTranslations.submitButton;
+    }
+
+    // Translate UI texts to target language
+    async function translateUITexts(targetLang) {
+      if (!targetLang || targetLang === "English") {
+        // Reset to default English strings
+        uiTranslations = { ...defaultUiTranslations };
+        updateVisibleForm();
+        return;
+      }
+
+      console.log(`Translating UI to ${targetLang}...`);
+
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+            // No Authorization header needed here, the Worker handles it
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content: `You are a UI translation assistant. Translate the values of the JSON object to ${targetLang}. Keep the keys exactly the same. Return ONLY the valid JSON object, nothing else.`
+              },
+              {
+                role: "user",
+                // ALWAYS translate from the immutable default (English) source
+                content: JSON.stringify(defaultUiTranslations)
+              }
+            ],
+            temperature: 0.1
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          console.warn("UI translation error:", data.error);
+          return;
+        }
+
+        const content = data?.choices?.[0]?.message?.content?.trim();
+
+        if (!content) return;
+
+        // Parse the JSON response (handle potential markdown code blocks)
+        const jsonStr = content.replace(/```json\n?|\n?```/g, "").trim();
+        const translated = JSON.parse(jsonStr);
+
+        if (translated && translated.companyPlaceholder) {
+          uiTranslations = { ...uiTranslations, ...translated };
+          console.log(`UI translated to ${targetLang}`);
+          updateVisibleForm();
+        } else {
+          console.warn("Translation response invalid:", translated);
+        }
+      } catch (error) {
+        console.error("UI translation failed:", error);
+      }
+    }
+
+    // Detect user language via IP (updates greeting and UI when ready)
+    detectLanguageFromIP().then(async result => {
+      if (result && result.language && result.language !== userLanguage) {
+        userLanguage = result.language;
+        userCountry = result.country || "Unknown";
+        detectedLanguages.add(userLanguage); // Track the detected language
+        console.log(`Detected user language via IP: ${userLanguage}, Country: ${userCountry}`);
+
+        // Trigger parallel translations
+        const greetingPromise = prepareGreeting();
+        const uiPromise = translateUITexts(userLanguage);
+
+        await Promise.all([greetingPromise, uiPromise]);
+      } else {
+        console.log(`Using default language: ${userLanguage}`);
+      }
+    });
+
+    fetchConfigFromWorker(INSTRUCTIONS_FILE)
+      .then(text => { if (text) systemInstructions = text.trim(); })
+      .catch(err => console.error("Could not load instructions:", err));
+
+
+
+    async function prepareGreeting() {
+      try {
+        if (userLanguage && greetingTranslations[userLanguage]) {
+          generatedGreeting = greetingTranslations[userLanguage];
+        } else {
+          generatedGreeting = greetingTranslations["English"];
+        }
+      } catch (err) {
+        console.error("Failed to prepare greeting:", err);
+        generatedGreeting = greetingTranslations["English"];
+      } finally {
+        greetingReady = true;
+        if (greetingPopup && greetingPopup.classList.contains("mcx-visible")) {
+          greetingPopup.textContent = generatedGreeting;
+        }
+      }
+    }
+
+    // Initialize greeting
+    fetchConfigFromWorker(GREETING_FILE)
+      .then(data => {
+        if (data && typeof data === 'object') {
+          greetingTranslations = { ...greetingTranslations, ...data };
+          prepareGreeting();
+        }
+      })
+      .catch(err => {
+        console.error("Could not load greeting translations:", err);
+        // Fallback to default English greeting (already in greetingTranslations)
+        prepareGreeting();
+      });
+
+    scheduleGreetingPopup();
+
+
+    let trainingData = {};
+    let validLinks = []; // Store list of valid links from training_links.txt
+    let isLoadingTrainingData = true; // Track if training data is still loading
+
+    // Helper function to fetch with timeout
+    async function fetchWithTimeout(url, timeout = 8000) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+      try {
+        const response = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        return response;
+      } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+      }
+    }
+
+    // Load a single link using proxies only (direct fetch always fails due to CORS)
+    // Try proxies sequentially to avoid rate limiting both at once
+    async function loadSingleLink(link) {
+      const proxies = [
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(link)}`,
+        `https://corsproxy.io/?${encodeURIComponent(link)}`
+      ];
+
+      // Try proxies sequentially (not in parallel) to avoid rate limits
+      for (let i = 0; i < proxies.length; i++) {
+        try {
+          const response = await fetchWithTimeout(proxies[i], 8000);
+          if (response && response.ok) {
+            const html = await response.text();
+            const text = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+            if (text && text.length > 100 && !text.toLowerCase().includes('cors')) {
+              trainingData[link] = text; // No character limit - get all content
+              console.log(`Loaded ${link} (proxy ${i + 1})`);
+              return true;
+            }
+          } else if (response && response.status === 429) {
+            // Rate limited - wait a bit before trying next proxy
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+        } catch (err) {
+          // If timeout or other error, continue to next proxy
+          if (err.name === 'AbortError') {
+            await new Promise(resolve => setTimeout(resolve, 500)); // Small delay on timeout
+          }
+          // Continue to next proxy
+          continue;
+        }
+      }
+
+      return false;
+    }
+
+    // Load training data - try pre-processed file first, fallback to fetching links
+    async function loadTrainingData() {
+      const chatToggle = document.getElementById("mcx-chat-toggle");
+
+      try {
+        console.log("Attempting to load pre-processed training data via worker...");
+        const data = await fetchConfigFromWorker(TRAINING_DATA_FILE);
+
+        if (data) {
+          validLinks = data.valid_links || [];
+          trainingData = data.training_data || {};
+
+          const loadedCount = Object.keys(trainingData).filter(k => trainingData[k]).length;
+          console.log(`✓ Loaded pre-processed data: ${loadedCount}/${validLinks.length} links (instant!)`);
+          if (data.last_updated) {
+            console.log(`  Last updated: ${data.last_updated}`);
+          }
+
+          isLoadingTrainingData = false;
+          if (chatToggle) {
+            chatToggle.classList.remove("mcx-loading");
+          }
+          return;
+        }
+      } catch (err) {
+        console.warn("Pre-processed data not available, falling back to live fetching...", err);
+      }
+
+      // Fallback: Load training data from links (old method)
+      try {
+        const linksText = await fetchConfigFromWorker(LINKS_FILE);
+        if (!linksText) throw new Error("No links file found");
+        const links = linksText.split("\n").filter(Boolean).map(link => link.trim());
+        validLinks = links; // Store valid links for validation
+
+        console.log(`Loading ${links.length} links in parallel...`);
+
+        // Load all links in parallel with a concurrency limit to avoid rate limiting
+        const BATCH_SIZE = 7; // Increased to 7 for faster loading (sequential proxy attempts help avoid rate limits)
+        for (let i = 0; i < links.length; i += BATCH_SIZE) {
+          const batch = links.slice(i, i + BATCH_SIZE);
+          const results = await Promise.allSettled(
+            batch.map(link => loadSingleLink(link))
+          );
+
+          // Count failures
+          const failed = results.filter(r => r.status === 'rejected' || (r.status === 'fulfilled' && !r.value)).length;
+          if (failed > 0) {
+            console.warn(`Batch ${Math.floor(i / BATCH_SIZE) + 1}: ${failed} links failed to load`);
+          }
+
+          // Add a smaller delay between batches to avoid rate limiting (reduced from 1000ms to 500ms)
+          if (i + BATCH_SIZE < links.length) {
+            await new Promise(resolve => setTimeout(resolve, 500)); // 500ms delay between batches
+          }
+        }
+
+        console.log("Training data loaded:", Object.keys(trainingData).length, "links");
+
+        // Hide loading indicator
+        isLoadingTrainingData = false;
+        if (chatToggle) {
+          chatToggle.classList.remove("mcx-loading");
+        }
+      } catch (err) {
+        console.error("Failed to load training links:", err);
+        // Hide loading indicator even on error
+        isLoadingTrainingData = false;
+        if (chatToggle) {
+          chatToggle.classList.remove("mcx-loading");
+        }
+      }
+    }
+
+    // Start loading training data in background
+    loadTrainingData();
+
+
+
+
+
+
+
+
+
+
+
+    // Convert markdown to HTML for better formatting
+    function markdownToHtml(text) {
+      if (!text) return "";
+
+      // Process markdown links BEFORE escaping HTML
+      // Handle markdown links [text](url) - extract and replace with placeholder
+      const linkPlaceholders = [];
+      let linkIndex = 0;
+      let processedText = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+        // Only create link if URL is valid (starts with http/https, /, ./ or #)
+        if (url && url.trim()) {
+          const trimmedUrl = url.trim();
+          // Check if it's a valid URL format
+          if (trimmedUrl.startsWith('http://') ||
+            trimmedUrl.startsWith('https://')) {
+            // For http/https URLs, check if they're in the validLinks array
+            const normalizedUrl = trimmedUrl.replace(/\/+$/, '');
+            const isValidLink = validLinks.some(validLink => {
+              const normalizedValid = validLink.trim().replace(/\/+$/, '');
+              return normalizedUrl === normalizedValid || normalizedUrl.startsWith(normalizedValid);
+            });
+
+            if (isValidLink) {
+              const placeholder = `__LINK_PLACEHOLDER_${linkIndex}__`;
+              linkPlaceholders.push({ placeholder, linkText, url: trimmedUrl });
+              linkIndex++;
+              return placeholder;
+            } else {
+              // URL is not in valid links - return just the text without making it a link
+              return linkText;
+            }
+          } else if (trimmedUrl.startsWith('/') ||
+            trimmedUrl.startsWith('./') ||
+            trimmedUrl.startsWith('../') ||
+            trimmedUrl.startsWith('#')) {
+            // Allow relative URLs and anchors (these are typically safe)
+            const placeholder = `__LINK_PLACEHOLDER_${linkIndex}__`;
+            linkPlaceholders.push({ placeholder, linkText, url: trimmedUrl });
+            linkIndex++;
+            return placeholder;
+          }
+        }
+        // If URL is invalid or empty, just return the text without brackets
+        return linkText;
+      });
+
+      // Also detect plain URLs in text (only http/https URLs)
+      // BUT only convert to links if they're in the validLinks array
+      processedText = processedText.replace(/(https?:\/\/[^\s\)]+)/g, (match, url) => {
+        // Only match if it looks like a real URL (has a domain)
+        if (url.match(/https?:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/)) {
+          // Check if this URL is in the valid links list
+          // Normalize URLs for comparison (remove trailing slashes, etc.)
+          const normalizedUrl = url.replace(/\/+$/, '');
+          const isValidLink = validLinks.some(validLink => {
+            const normalizedValid = validLink.trim().replace(/\/+$/, '');
+            return normalizedUrl === normalizedValid || normalizedUrl.startsWith(normalizedValid);
+          });
+
+          if (isValidLink) {
+            const placeholder = `__LINK_PLACEHOLDER_${linkIndex}__`;
+            linkPlaceholders.push({ placeholder, linkText: url, url: url });
+            linkIndex++;
+            return placeholder;
+          }
+        }
+        return url; // Return as-is if not a valid URL or not in validLinks
+      });
+
+      // Handle standalone [text] patterns - just remove brackets, don't make them links
+      processedText = processedText.replace(/\[([^\]]+)\](?!\()/g, '$1');
+
+      // Now escape HTML to prevent XSS
+      const div = document.createElement("div");
+      div.textContent = processedText;
+      let html = div.innerHTML;
+
+      // Restore links with proper HTML
+      linkPlaceholders.forEach(({ placeholder, linkText, url }) => {
+        // Escape the URL for safety
+        const escapedUrl = url.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        const escapedLinkText = linkText.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        html = html.replace(placeholder, `<a href="${escapedUrl}" target="_blank" rel="noopener noreferrer">${escapedLinkText}</a>`);
+      });
+
+      // Process line by line to handle lists and paragraphs
+      const lines = html.split(/\n/);
+      const result = [];
+      let currentParagraph = [];
+      let currentList = [];
+      let inList = false;
+      let listType = null; // 'ol' or 'ul'
+
+      function flushParagraph() {
+        if (currentParagraph.length > 0) {
+          let paraText = currentParagraph.join(" ").trim();
+          if (paraText) {
+            // Convert **bold** to <strong>
+            paraText = paraText.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+            result.push(`<p>${paraText}</p>`);
+          }
+          currentParagraph = [];
+        }
+      }
+
+      function flushList() {
+        if (currentList.length > 0) {
+          const tag = listType === 'ul' ? 'ul' : 'ol';
+          const startAttr = (listType === 'ol' && currentList.start && currentList.start > 1) ? ` start="${currentList.start}"` : '';
+          result.push(`<${tag}${startAttr}>${currentList.join("")}</${tag}>`);
+          currentList = [];
+          inList = false;
+          listType = null;
+        }
+      }
+
+      lines.forEach((line, index) => {
+        const trimmed = line.trim();
+
+        // Check if line is a numbered list item (e.g., "1. text" or "1.text")
+        const orderedListMatch = trimmed.match(/^(\d+)\.\s*(.+)$/);
+        // Check if line is an unordered list item (e.g., "- text" or "*text")
+        const unorderedListMatch = trimmed.match(/^[-*]\s*(.+)$/);
+
+        // Check if next line is also a numbered list item (to handle empty lines between items)
+        const nextLine = index + 1 < lines.length ? lines[index + 1].trim() : '';
+        const nextIsOrdered = nextLine.match(/^\d+\.\s*/);
+
+        if (orderedListMatch) {
+          // We're in an ordered list
+          const listNumber = parseInt(orderedListMatch[1], 10);
+
+          if (!inList || listType !== 'ol') {
+            flushParagraph();
+            if (inList && listType !== 'ol') {
+              flushList();
+            }
+            inList = true;
+            listType = 'ol';
+            // Store the start number for this list
+            currentList.start = listNumber;
+          }
+          // Process the list item text (handle bold and links)
+          let itemText = orderedListMatch[2];
+          itemText = itemText.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+          currentList.push(`<li>${itemText}</li>`);
+        } else if (unorderedListMatch) {
+          // We're in an unordered list
+          if (!inList || listType !== 'ul') {
+            flushParagraph();
+            if (inList && listType !== 'ul') {
+              flushList();
+            }
+            inList = true;
+            listType = 'ul';
+          }
+          // Process the list item text (handle bold and links)
+          let itemText = unorderedListMatch[1];
+          itemText = itemText.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+          currentList.push(`<li>${itemText}</li>`);
+        } else {
+          // Not a list item
+          // If we're in an ordered list and next line is also ordered, don't flush (allow empty lines)
+          if (inList && listType === 'ol' && nextIsOrdered) {
+            // Continue the list, skip this line (empty line between numbered items)
+            return;
+          }
+
+          if (inList) {
+            flushList();
+          }
+
+          if (trimmed) {
+            currentParagraph.push(trimmed);
+          } else {
+            // Empty line - flush current paragraph
+            flushParagraph();
+          }
+        }
+      });
+
+      // Flush any remaining content
+      flushList();
+      flushParagraph();
+
+      return result.join("");
+    }
+
+    // Check if bot message asks for form using GPT (works in any language)
+    async function shouldShowForm(message) {
+      // Translate message to English first, then check English keywords
+      let englishMessage = message;
+
+      try {
+        // Quick translation to English for keyword matching
+        const translateResponse = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content: "Translate the following message to English. Return ONLY the translation, nothing else."
+              },
+              {
+                role: "user",
+                content: message
+              }
+            ],
+            temperature: 0.1,
+            max_tokens: 200
+          })
+        });
+
+        const translateData = await translateResponse.json();
+        englishMessage = translateData?.choices?.[0]?.message?.content?.trim() || message;
+      } catch (error) {
+        console.warn("Translation failed, using original:", error);
+      }
+
+      // Check with English keywords only
+      const formRequestKeywords = [
+        "fill in", "fill out", "complete", "contact form", "quick form",
+        "name, phone", "name, email", "phone and email", "name, phone and email",
+        "fill a form", "fill the form", "fill this form"
+      ];
+      const lowerMessage = englishMessage.toLowerCase();
+
+      // Must contain at least one form-related keyword AND mention contact info
+      const hasFormKeyword = formRequestKeywords.some(keyword => lowerMessage.includes(keyword));
+      const mentionsContactInfo = lowerMessage.includes("name") ||
+        lowerMessage.includes("phone") ||
+        lowerMessage.includes("email");
+
+      // Quick check: only return true if both conditions are met
+      if (hasFormKeyword && mentionsContactInfo) {
+        return true;
+      }
+
+      // Use GPT to detect if message explicitly asks for form
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content: "You are a strict message classifier. Only respond 'yes' if the message EXPLICITLY asks the customer to fill out a contact form with their name, phone number, and/or email address. The message must contain a clear request to provide contact information via a form. If the message just mentions contact or provides information without asking for a form, respond 'no'. Respond with ONLY 'yes' or 'no', nothing else."
+              },
+              {
+                role: "user",
+                content: `Does this message EXPLICITLY ask the customer to fill out a contact form with their name, phone, and/or email? "${englishMessage}"`
+              }
+            ],
+            temperature: 0.1,
+            max_tokens: 10
+          })
+        });
+
+        const data = await response.json();
+        const result = data?.choices?.[0]?.message?.content?.trim().toLowerCase();
+        return result === "yes" || result === "yes." || result.startsWith("yes");
+      } catch (error) {
+        console.warn("GPT form detection failed:", error);
+        // Fallback: only return true if we have strong keyword match
+        return hasFormKeyword && mentionsContactInfo;
+      }
+    }
+
+    // Check if user agrees to fill form (translate to English first)
+    async function userAgreesToForm(userMessage) {
+      // Translate to English first
+      let englishMessage = userMessage;
+
+      try {
+        const translateResponse = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content: "Translate the following message to English. Return ONLY the translation, nothing else."
+              },
+              {
+                role: "user",
+                content: userMessage
+              }
+            ],
+            temperature: 0.1,
+            max_tokens: 50
+          })
+        });
+
+        const translateData = await translateResponse.json();
+        englishMessage = translateData?.choices?.[0]?.message?.content?.trim() || userMessage;
+      } catch (error) {
+        console.warn("Translation failed, using original:", error);
+      }
+
+      const agreementKeywords = ["yes", "ok", "okay", "sure", "of course", "yep", "yeah"];
+      const lowerMessage = englishMessage.toLowerCase().trim();
+      return agreementKeywords.includes(lowerMessage) || lowerMessage === "y";
+    }
+
+    // Check if form was already shown (to avoid duplicates)
+    // But allow it if user explicitly asks for it
+    function formAlreadyShown() {
+      return document.querySelector(".mcx-contact-form") !== null;
+    }
+
+    // Check if user is explicitly asking for the form
+    async function userAsksForForm(userMessage) {
+      // Translate to English first, then check English keywords
+      let englishMessage = userMessage;
+
+      try {
+        const translateResponse = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content: "Translate the following message to English. Return ONLY the translation, nothing else."
+              },
+              {
+                role: "user",
+                content: userMessage
+              }
+            ],
+            temperature: 0.1,
+            max_tokens: 200
+          })
+        });
+
+        const translateData = await translateResponse.json();
+        englishMessage = translateData?.choices?.[0]?.message?.content?.trim() || userMessage;
+      } catch (error) {
+        console.warn("Translation failed, using original:", error);
+      }
+
+      const lowerMessage = englishMessage.toLowerCase().trim();
+      const explicitKeywords = [
+        "form", "contact form", "show form", "send form",
+        "complete form", "fill form", "fill out form", "see form"
+      ];
+
+      // Quick keyword check (English only)
+      if (explicitKeywords.some(keyword => lowerMessage.includes(keyword))) {
+        return true;
+      }
+
+      // Use GPT to check if user is asking for form
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content: "You are a message classifier. Determine if the user is explicitly asking to see or fill out a contact form. Respond with ONLY 'yes' or 'no', nothing else."
+              },
+              {
+                role: "user",
+                content: `Is the user asking to see or fill out a contact form? "${englishMessage}"`
+              }
+            ],
+            temperature: 0.1,
+            max_tokens: 10
+          })
+        });
+
+        const data = await response.json();
+        const result = data?.choices?.[0]?.message?.content?.trim().toLowerCase();
+        return result === "yes" || result === "yes." || result.startsWith("yes");
+      } catch (error) {
+        console.warn("GPT user form request detection failed:", error);
+        return false;
+      }
+    }
+
+    // Generate short conversation summary for email (using GPT)
+    async function generateConversationSummary() {
+      if (conversationHistory.length === 0) {
+        return "No conversation history available.";
+      }
+
+      // Filter out system messages and keep only user/bot conversation
+      const conversation = conversationHistory
+        .filter(msg => msg.role === "user" || msg.role === "assistant")
+        .map(msg => {
+          const role = msg.role === "user" ? "Customer" : "RiA Assistant";
+          return `${role}: ${msg.content}`;
+        })
+        .join("\n\n");
+
+      // Use GPT to create a short summary (2-3 lines)
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content: "You are a summary assistant. Create a brief 2-3 line summary explaining what the customer was searching for or interested in. Focus on: product category, specific questions, and main interest. Be concise and clear."
+              },
+              {
+                role: "user",
+                content: `Create a brief summary of this conversation:\n\n${conversation}`
+              }
+            ],
+            temperature: 0.3,
+            max_tokens: 150
+          })
+        });
+
+        const data = await response.json();
+        const summary = data?.choices?.[0]?.message?.content?.trim();
+        return summary || "Customer showed interest in Robot Industries products.";
+      } catch (error) {
+        console.warn("Summary generation failed:", error);
+        // Fallback: simple summary
+        const userMessages = conversationHistory
+          .filter(msg => msg.role === "user")
+          .map(msg => msg.content)
+          .join("; ");
+        return `Customer inquired about: ${userMessages.substring(0, 200)}`;
+      }
+    }
+
+    // Create and add contact form to chat
+    function addContactForm(shouldScroll = true) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "mcx-message mcx-message--bot";
+
+      const bubble = document.createElement("div");
+      bubble.className = "mcx-bubble mcx-bubble--bot";
+
+      const form = document.createElement("form");
+      form.className = "mcx-contact-form";
+      form.id = "mcx-contact-form";
+
+      // Company field (First field)
+      const companyInput = document.createElement("input");
+      companyInput.type = "text";
+      companyInput.name = "user_company";
+      companyInput.placeholder = uiTranslations.companyPlaceholder;
+      companyInput.required = true;
+
+      // Email field
+      const emailInput = document.createElement("input");
+      emailInput.type = "email";
+      emailInput.name = "user_email";
+      emailInput.placeholder = uiTranslations.emailPlaceholder;
+      emailInput.required = true;
+
+      // Phone field
+      const phoneInput = document.createElement("input");
+      phoneInput.type = "tel";
+      phoneInput.name = "user_phone";
+      phoneInput.placeholder = uiTranslations.phonePlaceholder;
+      phoneInput.required = true;
+
+      // Submit button
+      const submitButton = document.createElement("button");
+      submitButton.type = "submit";
+      submitButton.textContent = uiTranslations.submitButton;
+
+      form.appendChild(companyInput);
+      form.appendChild(emailInput);
+      form.appendChild(phoneInput);
+      form.appendChild(submitButton);
+
+      // Handle form submission
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        submitButton.disabled = true;
+        submitButton.textContent = uiTranslations.sendingButton;
+
+        const formData = {
+          user_company: companyInput.value.trim(),
+          user_email: emailInput.value.trim(),
+          user_phone: phoneInput.value.trim(),
+          to_email: RECIPIENT_EMAIL
+        };
+
+        // Generate conversation summary (async GPT-generated short summary)
+        const conversationSummary = await generateConversationSummary();
+
+        try {
+          // Send email via EmailJS
+          if (EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY &&
+            EMAILJS_SERVICE_ID !== "YOUR_SERVICE_ID") {
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+              to_email: RECIPIENT_EMAIL,
+              from_name: formData.user_company, // Use company as from_name
+              from_email: formData.user_email,
+              phone: formData.user_phone,
+              company: formData.user_company,
+              message: `New contact form submission from chatbot:\n\n--- CONTACT INFORMATION ---\nCompany: ${formData.user_company}\nEmail: ${formData.user_email}\nPhone: ${formData.user_phone}\nCountry: ${userCountry}\nLanguages Used: ${Array.from(detectedLanguages).join(", ")}\n\n--- CONVERSATION SUMMARY ---\n${conversationSummary}`
+            });
+          } else {
+            // Fallback: log to console if EmailJS not configured
+            console.log("Form submission (EmailJS not configured):", formData);
+            throw new Error("EmailJS not configured");
+          }
+
+          // Show success message
+          form.innerHTML = `<div class="mcx-form-success">${uiTranslations.successMessage}</div>`;
+
+        } catch (error) {
+          console.error("Error sending email:", error);
+          form.innerHTML = `<div class="mcx-form-error">${uiTranslations.errorMessage}</div>`;
+        }
+      });
+
+      bubble.appendChild(form);
+      wrapper.appendChild(bubble);
+      chatHistory.appendChild(wrapper);
+      chatHistory.appendChild(wrapper);
+      if (shouldScroll) {
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      }
+    }
+
+    function addMessage(role, text, shouldScroll = true, checkForm = true) {
+      const wrapper = document.createElement("div");
+      const isUser = role === "You";
+      wrapper.className = `mcx-message ${isUser ? "mcx-message--user" : "mcx-message--bot"}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = `mcx-bubble ${isUser ? "mcx-bubble--user" : "mcx-bubble--bot"}`;
+
+      // Use textContent for user messages (security), innerHTML for bot messages (formatting)
+      if (isUser) {
+        bubble.textContent = text;
+      } else {
+        bubble.innerHTML = markdownToHtml(text);
+      }
+
+      wrapper.append(bubble);
+      chatHistory.appendChild(wrapper);
+
+      if (shouldScroll) {
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+      }
+
+      // Check if bot message asks for form and add it (async GPT check)
+      if (!isUser && checkForm) {
+        shouldShowForm(text).then(showForm => {
+          if (showForm) {
+            addContactForm(shouldScroll);
+          }
+        });
+      }
+
+      return wrapper;
+    }
+
+    function updateLastMessage(text) {
+      const last = chatHistory.lastElementChild;
+      if (!last) return;
+      const bubble = last.querySelector(".mcx-bubble");
+      if (bubble) {
+        // Check if it's a bot message (has bot class)
+        const isBot = last.classList.contains("mcx-message--bot");
+        if (isBot) {
+          bubble.innerHTML = markdownToHtml(text);
+          // Check if updated bot message asks for form (async GPT check)
+          shouldShowForm(text).then(showForm => {
+            if (showForm && !formAlreadyShown()) {
+              setTimeout(() => addContactForm(false), 500);
+            }
+          });
+        } else {
+          bubble.textContent = text;
+        }
+      }
+    }
+
+    // Extract English keywords from user message (handles multilingual queries)
+    // Uses GPT for better accuracy across all languages AND context awareness
+    async function extractSearchKeywords(userMessage) {
+      const lowerMessage = userMessage.toLowerCase();
+      const words = lowerMessage.split(/\s+/).filter(word => word.length > 2);
+      const keywords = new Set();
+
+      // Step 1: Add original words (useful for proper nouns or if already English)
+      words.forEach(word => {
+        const cleanWord = word.replace(/[?!.,;:]/g, ''); // Remove punctuation
+        if (cleanWord.length > 2) {
+          keywords.add(cleanWord);
+        }
+      });
+
+      // Step 2: Use GPT to translate query to English keywords (for better accuracy)
+      // This helps with context and synonyms that dictionary translation misses
+      try {
+        // Get last 2 messages for context (to handle "it", "that", "the V1", etc.)
+        const recentHistory = conversationHistory.slice(-2).map(msg =>
+          `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`
+        ).join("\n");
+
+        const contextPrompt = recentHistory ?
+          `\n\nRecent conversation context:\n${recentHistory}\n\nCurrent User Query: "${userMessage}"` :
+          `\nCurrent User Query: "${userMessage}"`;
+
+        const translationResponse = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content: "You are a keyword extraction assistant. Extract the key technical terms and concepts from the user's query and translate them to English. Return ONLY a comma-separated list of English keywords (no explanations, no full sentences). Focus on technical terms, product names, specifications, and important concepts. IMPORTANT: Use the provided conversation context to resolve references like 'it', 'this', or 'the previous one' to their actual technical names."
+              },
+              {
+                role: "user",
+                content: `Extract English keywords from this query, using context if needed:${contextPrompt}`
+              }
+            ],
+            temperature: 0.3,
+            max_tokens: 100
+          })
+        });
+
+        const translationData = await translationResponse.json();
+        const englishKeywords = translationData?.choices?.[0]?.message?.content?.trim();
+
+        if (englishKeywords) {
+          // Parse comma-separated keywords and add them
+          englishKeywords.split(',').forEach(kw => {
+            const cleanKw = kw.trim().toLowerCase();
+            if (cleanKw.length > 2) {
+              keywords.add(cleanKw);
+            }
+          });
+        }
+      } catch (error) {
+        console.warn("GPT keyword translation failed, using dictionary only:", error);
+      }
+
+      // Filter out empty strings and very short words
+      return Array.from(keywords).filter(k => k.length > 2);
+    }
+
+    // Find relevant training data based on user message
+    async function findRelevantTrainingData(userMessage) {
+      if (Object.keys(trainingData).length === 0) return "";
+
+      // Extract keywords (including English translations for multilingual queries)
+      const messageWords = await extractSearchKeywords(userMessage);
+      const relevantEntries = [];
+
+      // Check each training data entry for keyword matches with relevance scoring
+      for (const [link, text] of Object.entries(trainingData)) {
+        if (!text || text.length === 0) continue;
+
+        const textLower = text.toLowerCase();
+        let matchCount = 0;
+
+        // Count how many keywords match (relevance score)
+        messageWords.forEach(word => {
+          if (textLower.includes(word)) {
+            matchCount++;
+          }
+        });
+
+        // Only include entries with at least one match
+        if (matchCount > 0) {
+          relevantEntries.push({
+            link: link,
+            text: text,
+            score: matchCount,
+            length: text.length
+          });
+        }
+      }
+
+      // Sort by relevance score (highest first), then by length (longer entries first for more info)
+      relevantEntries.sort((a, b) => {
+        if (b.score !== a.score) {
+          return b.score - a.score; // Higher score first
+        }
+        return b.length - a.length; // Longer entries first if scores are equal
+      });
+
+      // Limit to top 5 most relevant entries and max 20000 characters total
+      const MAX_ENTRIES = 5;
+      const MAX_CHARS = 20000;
+
+      const selectedEntries = [];
+      let totalChars = 0;
+
+      for (const entry of relevantEntries.slice(0, MAX_ENTRIES)) {
+        const entryWithSeparator = entry.text + "\n\n";
+        const entryLength = entryWithSeparator.length;
+
+        if (totalChars + entryLength <= MAX_CHARS) {
+          selectedEntries.push(entry);
+          totalChars += entryLength;
+        } else {
+          // Try to fit partial entry if there's space
+          const remainingSpace = MAX_CHARS - totalChars;
+          if (remainingSpace > 100) { // Only if there's meaningful space left
+            const partialText = entry.text.substring(0, remainingSpace - 3) + "...";
+            selectedEntries.push({ ...entry, text: partialText });
+          }
+          break;
+        }
+      }
+
+      // Debug logging
+      console.log(`Training data search for: "${userMessage}"`);
+      console.log(`  Search keywords:`, messageWords);
+      console.log(`  Found ${relevantEntries.length} matching entries`);
+      console.log(`  Selected ${selectedEntries.length} entries (${totalChars} chars)`);
+      if (selectedEntries.length > 0) {
+        console.log(`  Top matches:`, selectedEntries.map(e => ({
+          score: e.score,
+          length: e.length,
+          link: e.link.substring(0, 60) + "..."
+        })));
+      } else if (relevantEntries.length === 0) {
+        console.warn(`  ⚠️ No training data found! Try adding more translations or check if training data contains these terms.`);
+      }
+
+      // Combine selected entries
+      const combined = selectedEntries.map(e => e.text).join("\n\n");
+      return combined;
+    }
+
+    // Detect language of user message
+    async function detectMessageLanguage(message) {
+      if (!message || message.length < 2) return null;
+
+      try {
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content: "You are a language detector. Return ONLY the English name of the language used in the message (e.g., 'English', 'Romanian', 'French'). If mixed, return the dominant one. If unsure or it's just numbers/symbols, return 'null'."
+              },
+              {
+                role: "user",
+                content: message
+              }
+            ],
+            temperature: 0.1,
+            max_tokens: 10
+          })
+        });
+
+        const data = await response.json();
+        const detected = data?.choices?.[0]?.message?.content?.trim();
+
+        if (detected && detected !== "null" && detected.length < 20) {
+          return detected;
+        }
+        return null;
+      } catch (error) {
+        console.warn("Language detection failed:", error);
+        return null;
+      }
+    }
+
+
+
+    // Log conversation to GitHub via Worker
+    async function logConversationToGithub() {
+      // Build transcript
+      const transcript = conversationHistory
+        .map(msg => `${msg.role === "user" ? "User" : "Assistant"}: ${msg.content}`)
+        .join("\n\n");
+
+      const logData = {
+        id: conversationId,
+        date: new Date().toISOString(),
+        ip: userIP, // Captured during geolocation
+        country: userCountry,
+        languages: Array.from(detectedLanguages).join(", ") || userLanguage,
+        transcript: transcript
+      };
+
+      try {
+        // Send to worker (fire and forget - don't await result to avoid blocking chat)
+        fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "log_conversation",
+            data: logData
+          })
+        }).catch(err => console.warn("Background logging failed:", err));
+      } catch (e) {
+        console.warn("Logging error:", e);
+      }
+    }
+
+    // Helper to check if user is restricted
+    function checkRestriction() {
+      const now = Date.now();
+      const restrictionEnd = parseInt(localStorage.getItem("mcx_restriction_end") || "0");
+      if (now < restrictionEnd) {
+        return restrictionEnd;
+      }
+      return 0;
+    }
+
+    async function sendMessage() {
+      // Block if restricted
+      if (checkRestriction() > 0) {
+        chatInput.disabled = true;
+        return;
+      }
+      const userMessage = chatInput.value.trim();
+      if (!userMessage) return;
+
+      // Check for active restriction
+      const restrictionEnd = checkRestriction();
+
+      if (restrictionEnd > 0) {
+        const remainingHours = Math.ceil((restrictionEnd - Date.now()) / (1000 * 60 * 60));
+        addMessage("RiA", uiTranslations.restrictionMessage, true, false);
+        addContactForm(false);
+        chatInput.value = "";
+        chatInput.disabled = true; // Disable input
+        return;
+      }
+
+      // Load timestamps from localStorage (to persist across reloads)
+      let timestamps = JSON.parse(localStorage.getItem("mcx_message_timestamps") || "[]");
+
+      // Filter timestamps: keep only those within the last 30 minutes
+      const now = Date.now();
+      timestamps = timestamps.filter(t => now - t < 30 * 60 * 1000);
+
+      // Check conditions
+      const countLastMinute = timestamps.filter(t => now - t < 60 * 1000).length;
+      const countLast30Minutes = timestamps.length;
+
+      if (countLastMinute >= LIMIT_1_MINUTE || countLast30Minutes >= LIMIT_30_MINUTES) {
+        // Trigger restriction
+        const newRestrictionEnd = now + RESTRICTION_DURATION;
+        localStorage.setItem("mcx_restriction_end", newRestrictionEnd.toString());
+
+        addMessage("RiA", uiTranslations.restrictionMessage, true, false);
+        addContactForm(false);
+        chatInput.value = "";
+        chatInput.disabled = true; // Disable input
+        return;
+      }
+
+      // Add current timestamp and save
+      timestamps.push(now);
+      localStorage.setItem("mcx_message_timestamps", JSON.stringify(timestamps));
+
+      // Sync in-memory variable (though we use localStorage as source of truth now)
+      messageTimestamps = timestamps;
+
+      // Expand chat window fully when user sends a message
+      chatWindow.classList.remove("mcx-mobile-partial");
+
+      const userMsgElement = addMessage("You", userMessage);
+      chatInput.value = "";
+
+      chatInput.blur();
+      chatInput.disabled = true; // Disable input while generating
+      sendButton.disabled = true;
+
+
+      // Add user message to conversation history
+      conversationHistory.push({
+        role: "user",
+        content: userMessage
+      });
+
+      // Check if user explicitly asks for form (even if already shown) - show it immediately
+      const userWantsForm = await userAsksForForm(userMessage);
+      if (userWantsForm) {
+        // Remove "Thinking..." message and show form
+        const thinkingMsg = chatHistory.lastElementChild;
+        if (thinkingMsg && thinkingMsg.textContent.includes("Thinking")) {
+          thinkingMsg.remove();
+        }
+        addContactForm(false);
+        // Ensure user message is visible at the top
+        if (userMsgElement) {
+          setTimeout(() => {
+            const userMsgTop = userMsgElement.getBoundingClientRect().top;
+            const chatHistoryTop = chatHistory.getBoundingClientRect().top;
+            const relativeTop = userMsgTop - chatHistoryTop;
+
+            chatHistory.scrollTo({
+              top: chatHistory.scrollTop + relativeTop - 10,
+              behavior: "smooth"
+            });
+          }, 150);
+        }
+        sendButton.disabled = false;
+        return; // Don't send to API if user just wants the form
+      }
+
+      // Check if user agrees to fill form - if so, show form immediately
+      if (await userAgreesToForm(userMessage)) {
+        // Check last bot message to see if it asked for form
+        const lastBotMessage = conversationHistory
+          .slice()
+          .reverse()
+          .find(msg => msg.role === "assistant");
+
+        if (lastBotMessage) {
+          // Use async GPT check
+          const showForm = await shouldShowForm(lastBotMessage.content);
+          if (showForm) {
+            // Remove "Thinking..." message and show form
+            const thinkingMsg = chatHistory.lastElementChild;
+            if (thinkingMsg && thinkingMsg.textContent.includes("Thinking")) {
+              thinkingMsg.remove();
+            }
+            addContactForm(false);
+            // Ensure user message is visible at the top
+            if (userMsgElement) {
+              setTimeout(() => {
+                const userMsgTop = userMsgElement.getBoundingClientRect().top;
+                const chatHistoryTop = chatHistory.getBoundingClientRect().top;
+                const relativeTop = userMsgTop - chatHistoryTop;
+
+                chatHistory.scrollTo({
+                  top: chatHistory.scrollTop + relativeTop - 10,
+                  behavior: "smooth"
+                });
+              }, 150);
+            }
+            sendButton.disabled = false;
+            return; // Don't send to API if we're showing the form
+          }
+        }
+      }
+
+
+      // Show typing indicator
+      const typingId = "mcx-typing-" + Date.now();
+      const typingWrapper = document.createElement("div");
+      typingWrapper.className = "mcx-message mcx-message--bot";
+      typingWrapper.id = typingId;
+      typingWrapper.innerHTML = `
+        <div class="mcx-bubble mcx-bubble--bot">
+          <div class="mcx-typing-indicator">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      `;
+      chatHistory.appendChild(typingWrapper);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+
+      try {
+        // Parallel: Detect language AND find relevant context
+        const langPromise = detectMessageLanguage(userMessage);
+        const contextPromise = findRelevantTrainingData(userMessage);
+
+        const [detectedLang, relevantContext] = await Promise.all([langPromise, contextPromise]);
+
+        // Update language if changed or just track it
+        if (detectedLang) {
+          detectedLanguages.add(detectedLang); // Always track detected language
+
+          if (detectedLang !== userLanguage) {
+            console.log(`Language switched from ${userLanguage} to ${detectedLang}`);
+            userLanguage = detectedLang;
+            // Trigger UI translation in background
+            translateUITexts(userLanguage);
+          } else {
+            // Even if language didn't change, ensure UI is translated (robustness)
+            translateUITexts(userLanguage);
+          }
+        }
+
+        // Prepare system message with context and instructions
+        let systemContent = systemInstructions;
+
+        // Add list of valid links to system instructions so AI knows what links are available
+        if (validLinks && validLinks.length > 0) {
+          systemContent += "\n\nIMPORTANT: You may ONLY provide links from this approved list. Do NOT make up or invent any links. If a link is not in this list, do not provide it. Valid links:\n" + validLinks.join("\n");
+        }
+
+        if (relevantContext) {
+          systemContent += "\n\nRelevant Information from Knowledge Base:\n" + relevantContext;
+        }
+
+        // Add language instruction
+        systemContent += `\n\nIMPORTANT: The user is currently speaking ${userLanguage}. You MUST reply in ${userLanguage}.`;
+
+        const messages = [
+          { role: "system", content: systemContent },
+          ...conversationHistory
+        ];
+
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: messages,
+            temperature: 0.7
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          console.error("OpenAI Error:", data.error);
+          throw new Error(data.error.message || "OpenAI API Error");
+        }
+
+        if (!data.choices || !data.choices[0]) {
+          console.error("Unexpected response format:", data);
+          throw new Error("Invalid response from server");
+        }
+
+        const botMessage = data.choices[0].message.content;
+
+        // Remove typing indicator
+        const typingElement = document.getElementById(typingId);
+        if (typingElement) typingElement.remove();
+
+        addMessage("RiA", botMessage, false);
+        conversationHistory.push({ role: "assistant", content: botMessage });
+
+        // Scroll so that the user's message is at the top
+        userMsgElement.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        // Log conversation after bot reply
+        logConversationToGithub();
+
+      } catch (error) {
+        console.error("Error:", error);
+        const typingElement = document.getElementById(typingId);
+        if (typingElement) typingElement.remove();
+        addMessage("RiA", uiTranslations.chatErrorMessage);
+      } finally {
+        // Re-enable input only if NOT restricted
+        if (checkRestriction() === 0) {
+          chatInput.disabled = false;
+          sendButton.disabled = false;
+        } else {
+          chatInput.disabled = true; // Ensure it stays disabled if restricted
+          sendButton.disabled = true;
+        }
+        // chatInput.focus(); // Removed to keep keyboard closed
+      }
+    }
+
+    // Show greeting popup above icon
+    function showGreetingPopup() {
+      if (!greetingPopup || conversationHistory.length > 0) return;
+
+      const greeting = generatedGreeting || greetingMessage || "Hello! How can I help you today?";
+
+      // Split into two parts: First sentence vs Rest
+      // Match first occurrence of [.!?] followed by space or end of string
+      let parts = [greeting];
+      // Regex to find the first sentence boundary
+      const match = greeting.match(/^(.+?[.?])\s+(.+)$/s);
+
+      if (match) {
+        parts = [match[1], match[2]];
+      }
+
+      greetingPopup.innerHTML = ""; // Clear previous content
+
+      parts.forEach(part => {
+        const bubble = document.createElement("div");
+        bubble.className = "mcx-greeting-bubble";
+        bubble.textContent = part;
+        // Add click handler to open chat
+        bubble.onclick = function () {
+          toggleChat();
+        };
+        greetingPopup.appendChild(bubble);
+      });
+
+      greetingPopup.classList.add("mcx-popup-visible");
+    }
+
+    // Hide greeting popup
+    function hideGreetingPopup() {
+      if (!greetingPopup) return;
+      greetingPopup.classList.remove("mcx-popup-visible");
+      if (greetingPopupTimeout) {
+        clearTimeout(greetingPopupTimeout);
+        greetingPopupTimeout = null;
+      }
+    }
+
+    // Schedule greeting popup to show after 5 seconds
+    function scheduleGreetingPopup() {
+      // Only schedule if chat hasn't been opened yet
+      if (conversationHistory.length === 0) {
+        greetingPopupTimeout = setTimeout(() => {
+          // Double-check chat hasn't been opened in the meantime
+          if (conversationHistory.length === 0 && !chatbot.classList.contains("mcx-widget-expanded")) {
+            showGreetingPopup();
+          }
+        }, 5000); // 5 seconds
+      }
+    }
+
+    // Auto-greet function - uses translated greeting
+    async function sendGreeting() {
+      if (conversationHistory.length > 0) return; // Don't greet if already started conversation
+
+      // Check for restriction
+      const restrictionEnd = checkRestriction();
+      if (restrictionEnd > 0) {
+        const remainingHours = Math.ceil((restrictionEnd - Date.now()) / (1000 * 60 * 60));
+        const limitMsg = `You have reached the message limit. Please try again in ${remainingHours} hours. In the meantime, please fill out the form below for further assistance.`;
+
+        addMessage("RiA", limitMsg, true, false);
+        conversationHistory.push({ role: "assistant", content: limitMsg });
+
+        addContactForm();
+        chatInput.disabled = true; // Disable input
+        return;
+      }
+
+      // Use translated greeting if available, otherwise use default
+      const greeting = generatedGreeting || greetingTranslations["English"];
+      addMessage("Bot", greeting);
+
+      // Add greeting to conversation history
+      conversationHistory.push({
+        role: "assistant",
+        content: greeting
+      });
+    }
+
+    // Toggle chat window
+    function toggleChat() {
+      // Prevent opening chat while training data is loading
+      if (isLoadingTrainingData) {
+        // Show loading indicator when user clicks while loading
+        chatToggle.classList.add("mcx-widget-loading");
+        return;
+      }
+
+      // Hide popup and cancel timeout when chat opens
+      hideGreetingPopup();
+
+      const isOpen = chatbot.classList.toggle("mcx-widget-expanded");
+      if (isOpen) {
+        chatToggle.setAttribute("aria-label", "Close chat");
+
+        // Mobile Partial Open Logic
+        // Only open partially if the user hasn't sent a message yet
+        const userHasSentMessage = conversationHistory.some(msg => msg.role === "user");
+
+        // Apply to mobile and "expandable phones"/tablets up to 1600px
+        if (window.innerWidth <= 1600 && !userHasSentMessage) {
+          chatWindow.classList.add("mcx-mobile-partial");
+        } else {
+          chatWindow.classList.remove("mcx-mobile-partial");
+        }
+
+        // Auto-focus removed to prevent keyboard from opening on mobile
+        // Send greeting when chat opens (only if conversation is empty)
+        if (conversationHistory.length === 0) {
+          sendGreeting();
+        }
+
+        // Check restriction on open to disable input if needed
+        if (checkRestriction() > 0) {
+          chatInput.disabled = true;
+        } else {
+          chatInput.disabled = false;
+        }
+      } else {
+        chatToggle.setAttribute("aria-label", "Open chat");
+        // Reset partial state when closing
+        chatWindow.classList.remove("mcx-mobile-partial");
+      }
+    }
+
+    chatToggle.addEventListener("click", () => {
+      toggleChat();
+    });
+
+    chatInput.addEventListener("keydown", (event) => {
+      // Prevent sending if disabled or button is disabled (generating)
+      if (chatInput.disabled || sendButton.disabled) {
+        event.preventDefault();
+        return;
+      }
+
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Send button click handler
+    sendButton.addEventListener("click", () => {
+      sendMessage();
+    });
+
+    // Close popup and chat window when clicking outside
+    document.addEventListener("click", (event) => {
+      // Handle Greeting Popup
+      if (greetingPopup && greetingPopup.classList.contains("mcx-popup-visible")) {
+        // If click is NOT inside the popup AND NOT on the toggle button
+        if (!greetingPopup.contains(event.target) && !chatToggle.contains(event.target)) {
+          hideGreetingPopup();
+        }
+      }
+
+      // Handle Chat Window
+      if (chatbot.classList.contains("mcx-widget-expanded")) {
+        // If click is NOT inside the chatbot container (which includes window and toggle)
+        if (!chatbot.contains(event.target)) {
+          toggleChat();
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

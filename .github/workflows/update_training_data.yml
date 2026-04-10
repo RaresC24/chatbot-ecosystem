@@ -1,0 +1,73 @@
+name: Update Training Data
+
+# Run this workflow once a day at 6 PM Romania time (UTC+2 => 16:00 UTC)
+on:
+  schedule:
+    - cron: '0 16 * * *'  # Every day at 16:00 UTC (6:00 PM Romania)
+  workflow_dispatch:  # Allow manual trigger from GitHub UI
+
+jobs:
+  update-training-data:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Needed to push changes
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install Chrome
+        run: |
+          # Install Google Chrome
+          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+          # webdriver-manager will handle ChromeDriver installation automatically
+      
+      - name: Install dependencies
+        run: |
+          if [ ! -f requirements.txt ]; then
+            echo "⚠ requirements.txt not found, installing basic dependencies..."
+            pip install requests beautifulsoup4 selenium webdriver-manager
+          else
+            pip install -r requirements.txt
+          fi
+      
+      - name: Configure Git
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+      
+      - name: Check required files
+        run: |
+          if [ ! -f preprocess_training_data.py ]; then
+            echo "✗ Error: preprocess_training_data.py not found!"
+            exit 1
+          fi
+          if [ ! -f training_links.txt ]; then
+            echo "⚠ Warning: training_links.txt not found in repo, will fetch from GitHub"
+          fi
+          echo "✓ Required files found"
+      
+      - name: Run preprocessing script
+        run: |
+          python preprocess_training_data.py
+      
+      - name: Check for changes and push
+        run: |
+          if [ -n "$(git status --porcelain training_data.json)" ]; then
+            echo "Training data has been updated, pushing to GitHub..."
+            git add training_data.json
+            git commit -m "Auto-update training data (scheduled daily)"
+            git push origin main
+          else
+            echo "No changes to training data"
+          fi
+

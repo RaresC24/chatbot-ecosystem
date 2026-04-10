@@ -1,0 +1,24 @@
+name: Daily Chat Log Email
+
+on:
+  schedule:
+    # Run at 22:00 UTC (approx Midnight in Romania/EET depending on DST)
+    - cron: '0 22 * * *'
+  workflow_dispatch: # Allow manual trigger for testing
+
+jobs:
+  send-log:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Send Daily Log via EmailJS
+        run: node .github/scripts/send_daily_log.js
+        env:
+          EMAILJS_PRIVATE_KEY: ${{ secrets.EMAILJS_PRIVATE_KEY }}
