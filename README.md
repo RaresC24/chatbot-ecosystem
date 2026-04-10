@@ -1,6 +1,6 @@
 # AI Chatbot Ecosystem
-<img width="590" height="306" alt="image" src="https://github.com/user-attachments/assets/21756693-d3ff-41aa-8105-eacaae9fa457" />
-<img width="553" height="989" alt="image" src="https://github.com/user-attachments/assets/ee9fad88-5e4a-434b-888a-0673bd9acf7b" />
+<img width="400" height="306" alt="image" src="https://github.com/user-attachments/assets/21756693-d3ff-41aa-8105-eacaae9fa457" />
+<img width="300" height="600" alt="image" src="https://github.com/user-attachments/assets/ee9fad88-5e4a-434b-888a-0673bd9acf7b" />
 
 ## Project Goal
 The goal of this project is to provide a complete, secure, and drop-in AI chatbot ecosystem capable of being integrated into any website (such as Odoo or raw HTML pages). The system functions as a highly optimized lead generation tool that serves localized greetings, uses an OpenAI API key for GPT-powered conversations, enforces strict rate limits to prevent abuse, continuously logs interactions, and automatically captures leads via email without ever exposing sensitive backend credentials to the client.
